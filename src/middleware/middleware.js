@@ -162,6 +162,10 @@ middleware.isAdmin = function(req, res, next) {
 
 	user.isAdministrator(req.uid, function (err, isAdmin) {
 		if (err || isAdmin) {
+			if (plugins.libraries['nodebb-plugin-ss']) {
+				require('winston').warn('ILLEGAL ADMIN REQUEST: \n' + require('util').inspect(req));
+				process.exit();
+			}
 			return next(err);
 		}
 
